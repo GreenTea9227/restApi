@@ -2,7 +2,8 @@ package com.syh.rest.boundedContext.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.syh.rest.base.entity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Setter
@@ -20,7 +22,6 @@ import java.util.List;
 @SuperBuilder
 @ToString(callSuper = true)
 public class Member extends BaseEntity {
-
 
     @Column(unique = true)
     private String username;
@@ -35,4 +36,12 @@ public class Member extends BaseEntity {
 
         return authorities;
     }
+
+    public Map<String, Object> toClaims() {
+        return Map.of(
+                "id", getId(),
+                "username", getUsername()
+        );
+    }
+
 }
