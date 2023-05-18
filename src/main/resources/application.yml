@@ -7,15 +7,13 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
+
         use_sql_comments: true
-logging:
-  level:
-    root: INFO
-    com.ll.rest_api: DEBUG
-    org.hibernate.orm.jdbc.bind: TRACE
-    org.hibernate.orm.jdbc.extract: TRACE
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
 
 custom:
   site:
