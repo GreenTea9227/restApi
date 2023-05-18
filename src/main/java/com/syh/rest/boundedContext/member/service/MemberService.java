@@ -4,6 +4,7 @@ import com.syh.rest.base.jwt.JwtProvider;
 import com.syh.rest.boundedContext.member.entity.Member;
 import com.syh.rest.boundedContext.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class MemberService {
     }
 
     public String getAccessToken(String username, String password) {
-        Member member = findByUsername(username).orElse(null);
+        Member member = findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("no user"));
 
         if (member == null)
             return null;

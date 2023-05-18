@@ -1,5 +1,6 @@
 package com.syh.rest.base.security;
 
+import com.syh.rest.base.security.entryPoint.ApiAuthenticationEntryPoint;
 import com.syh.rest.base.security.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,11 +15,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class ApiSecurityConfig {
 
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final ApiAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.securityMatcher("/api/**")
+                .exceptionHandling( e -> e.authenticationEntryPoint(authenticationEntryPoint))
                 .authorizeHttpRequests(auth ->
                     auth.requestMatchers("/api/*/member/login").permitAll()
                             .anyRequest().authenticated()
