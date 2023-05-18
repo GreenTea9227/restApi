@@ -5,6 +5,7 @@ import com.syh.rest.boundedContext.member.dto.MemberDto;
 import com.syh.rest.boundedContext.member.entity.Member;
 import com.syh.rest.boundedContext.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -62,7 +63,7 @@ public class MemberController {
     }
 
     @GetMapping(value = "/me", consumes = ALL_VALUE)
-    @Operation(summary = "로그인된 사용자 정보")
+    @Operation(summary = "로그인된 사용자 정보", security = @SecurityRequirement(name = "bearerAuth"))
     public RsData<MeResponse> me(@AuthenticationPrincipal User user) {
         Member member = memberService.findByUsername(user.getUsername()).get();
 
