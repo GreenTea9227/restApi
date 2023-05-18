@@ -10,7 +10,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -20,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
-class ArticleControllerTest {
+public class ArticleControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -40,5 +39,23 @@ class ArticleControllerTest {
                 .andExpect(jsonPath("$.resultCode").value("S-1"))
                 .andExpect(jsonPath("$.msg").exists())
                 .andExpect(jsonPath("$.data.articles[0].id").exists());
+    }
+
+    @Test
+    @DisplayName("GET /articles/1")
+    void t2() throws Exception {
+        // When
+        ResultActions resultActions = mvc
+                .perform(
+                        get("/api/v1/articles/1")
+                )
+                .andDo(print());
+
+        // Then
+        resultActions
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.resultCode").value("S-1"))
+                .andExpect(jsonPath("$.msg").exists())
+                .andExpect(jsonPath("$.data.article.id").value(1));
     }
 }

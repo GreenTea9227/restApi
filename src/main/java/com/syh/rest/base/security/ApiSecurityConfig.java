@@ -28,6 +28,7 @@ public class ApiSecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/*/member/login").permitAll()
                                 .requestMatchers(GET,"/api/*/articles").permitAll()
+                                .requestMatchers(GET,"/api/*/articles/*").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .cors().disable()
