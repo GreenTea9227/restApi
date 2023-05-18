@@ -8,11 +8,14 @@ spring:
     properties:
       hibernate:
         use_sql_comments: true
+        default_batch_fetch_size: 100
 
 decorator:
   datasource:
     p6spy:
       enable-logging: true
+
+
 
 custom:
   site:
