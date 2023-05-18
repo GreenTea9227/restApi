@@ -1,11 +1,13 @@
 package com.syh.rest.boundedContext.member.dto;
 
 import com.syh.rest.boundedContext.member.entity.Member;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
+@Getter
+@NoArgsConstructor
 public class MemberDto {
     private Long id;
     private LocalDateTime regDate;
@@ -17,7 +19,7 @@ public class MemberDto {
         this.regDate = member.getCreateDate();
     }
 
-    public static MemberDto of (Member member) {
+    public static MemberDto of(Member member) {
         return new MemberDto(member);
     }
 
