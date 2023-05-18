@@ -10,22 +10,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/member",produces = APPLICATION_JSON_VALUE,consumes = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/member", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 public class MemberController {
 
     private final MemberService memberService;
 
     @Getter
-    @NoArgsConstructor
     @AllArgsConstructor
     public static class LoginRequest {
         @NotBlank
@@ -37,19 +34,34 @@ public class MemberController {
     @Getter
     @RequiredArgsConstructor
     public static class LoginResponse {
-       private final String accessToken;
+        private final String accessToken;
     }
 
     @PostMapping("/login")
-    public RsData<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse resp) {
+    public RsData<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         String accessToken = memberService.getAccessToken(loginRequest.getUsername(), loginRequest.getPassword());
-
-        resp.addHeader("Authentication",accessToken);
 
         return RsData.of(
                 "S-1",
                 "엑세스토큰이 생성되었습니다.",
                 new LoginResponse(accessToken)
+        );
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class MeResponse {
+        private final Member member;
+    }
+
+    @GetMapping(value = "/me", consumes = ALL_VALUE)
+    public RsData<MeResponse> me() {
+        Member member = memberService.findByUsername("user1").get();
+
+        return RsData.of(
+                "S-1",
+                "성공",
+                new MeResponse(member)
         );
     }
 }
